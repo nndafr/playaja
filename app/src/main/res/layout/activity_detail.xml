@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".presentation.detail.DetailActivity">
+
+
+    <include
+        android:id="@+id/brand_toolbar"
+        layout="@layout/custom_appbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/_16sdp"
+        android:layout_marginEnd="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:layout_below="@id/brand_toolbar"
+        android:orientation="vertical">
+
+
+        <WebView
+            android:id="@+id/movie_player"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_150sdp"
+            android:layout_marginTop="@dimen/_8sdp" />
+
+
+        <TextView
+            android:id="@+id/movie_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:maxLines="2"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="Spider-Man: No Way Home" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:weightSum="8">
+
+            <TextView
+                android:id="@+id/movie_ratings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:src="@drawable/ic_star"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:drawableStartCompat="@drawable/ic_star"
+                tools:text="4.8" />
+
+            <TextView
+                android:id="@+id/movie_relase_date"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:text="@string/movie_rating_text"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:text="@string/title_movie_overview"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/movie_overview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="normal"
+            tools:text="-" />
+
+        <TextView
+            android:id="@+id/title_section_recommendation_movie"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_32sdp"
+            android:text="@string/title_movie_recommedation"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_movie_recommendation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp" />
+
+
+    </LinearLayout>
+
+</RelativeLayout>

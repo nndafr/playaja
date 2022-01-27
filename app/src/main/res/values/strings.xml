@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">PlayAja</string>
+    <string name="movie_rating_text">Rilis: %1$s</string>
+    <string name="title_movie_overview">Kilasan Singkat</string>
+    <string name="title_movie_recommedation">Rekomendasi Film</string>
+    <string name="title_movie_popular">Film Populer</string>
+    <string name="title_movie_popular_country">Populer di Indonesia</string>
+    <string name="error_get_movie">Error ketika mengambil data film!</string>
+    <string name="complete_get_movie">Selesai mengambil data film</string>
+    <string name="no_overview">Tidak ada ringkasan</string>
+</resources>
