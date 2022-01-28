@@ -27,32 +27,30 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
 
 
     public DetailPresenter(DetailView dvi, GetMovieDetailUseCase getMovieDetailUseCase) {
-        this.dvi = dvi;
         this.getMovieDetailUseCase = getMovieDetailUseCase;
+        this.dvi = dvi;
     }
 
     @Override
     public void getSingleMovie(int movie_id) {
-        getDetailMovieObservable(movie_id).subscribeWith(getDetailMovieObserver());
+        Log.d(TAG, "getSingleMovie " + movie_id);
+
+        getMovieDetailUseCase.getSingleMovie(movie_id).subscribeWith(getDetailMovieObserver());
+
+
     }
 
-    public Observable<MovieResult> getDetailMovieObservable(int movie_id){
-        return RetrofitClient.getRetrofit().create(MovieService.class)
-                .getDetailMovie(movie_id, Constants.API_KEY, Constants.DEFAULT_LANGUAGE)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     public DisposableObserver<MovieResult> getDetailMovieObserver(){
         return new DisposableObserver<MovieResult>() {
             @Override
             public void onNext(@NonNull MovieResult movie) {
-                Log.d(TAG, "onNext " + movie.getId());
+                Log.d(TAG, "getDetailMovie onNext " + movie.getId());
                 dvi.displayDetailMovie(movie);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "onError  " + e);
+                Log.d(TAG, "getDetailMovie onError  " + e);
                 e.printStackTrace();
                 dvi.displayError(String.valueOf(R.string.error_get_movie));
             }
@@ -67,15 +65,10 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
 
     @Override
     public void getSingleVideo(int movie_id) {
-        getSingleVideoMovieObservable(movie_id).subscribeWith(getSingleVideoMovieObserver());
+        Log.d(TAG, "getSingleVideo " + movie_id);
+        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribeWith(getSingleVideoMovieObserver());
     }
 
-    public Observable<Video> getSingleVideoMovieObservable(int movie_id){
-        return RetrofitClient.getRetrofit().create(MovieService.class)
-                .getVideoMovie(movie_id, Constants.API_KEY)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
     public DisposableObserver<Video> getSingleVideoMovieObserver(){
         return new DisposableObserver<Video>() {
@@ -98,9 +91,6 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
             }
         };
     }
-
-
-
 
 
     @Override

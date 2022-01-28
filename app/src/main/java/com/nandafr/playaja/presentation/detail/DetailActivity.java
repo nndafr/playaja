@@ -12,7 +12,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,11 +22,7 @@ import com.nandafr.playaja.domain.models.Movie;
 import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.domain.models.Video;
 import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCase;
-import com.nandafr.playaja.domain.usecases.GetMovieUseCase;
 import com.nandafr.playaja.external.Constants;
-import com.nandafr.playaja.presentation.main.MainActivity;
-import com.nandafr.playaja.presentation.main.MainPresenter;
-import com.nandafr.playaja.presentation.main.MainUseCaseImp;
 
 public class DetailActivity extends AppCompatActivity implements DetailView {
 
@@ -59,6 +54,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
             movieid = (int) savedInstanceState.getSerializable(Constants.KEY_IDMOVIE);
         }
 
+        Log.d(TAG, "onCreate MovieID: " + movieid);
+
         setupViews();
         setupMVP();
         getMovieDetail(movieid);
@@ -67,7 +64,7 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
     }
 
     private void setupMVP() {
-        getMovieDetailUseCase = new DetailUseCaseImp();
+        getMovieDetailUseCase = new GetMovieDetailUseCase();
         detailPresenter = new DetailPresenter(this, getMovieDetailUseCase);
     }
 

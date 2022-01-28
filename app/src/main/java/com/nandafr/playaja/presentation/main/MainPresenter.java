@@ -33,33 +33,25 @@ public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main
 
     @Override
     public void getMovie() {
-        getMovieObservable().subscribeWith(getMovieObserver());
-
+        getMovieUseCase.getPopMovie().subscribeWith(getMovieObserver());
     }
 
     @Override
     public void getPopMovieCountry() {
-        getMovieCountryObservable().subscribeWith(getMovieCountryObserver());
-    }
-
-    public Observable<Movie> getMovieObservable(){
-        return RetrofitClient.getRetrofit().create(MovieService.class)
-                .getPopMovies(Constants.API_KEY, Constants.DEFAULT_LANGUAGE,"1")
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        getMovieUseCase.getPopMovieByCountry().subscribeWith(getMovieCountryObserver());
     }
 
     public DisposableObserver<Movie> getMovieObserver(){
         return new DisposableObserver<Movie>() {
             @Override
             public void onNext(@NonNull Movie movie) {
-                Log.d(TAG, "onNext " + movie.getTotalResults());
+                Log.d(TAG, "getMovie onNext " + movie.getTotalResults());
                 mvi.displayMovies(movie);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "onError  " + e);
+                Log.d(TAG, "getMovie onError  " + e);
                 e.printStackTrace();
                 mvi.displayError(String.valueOf(R.string.error_get_movie));
             }
@@ -71,26 +63,17 @@ public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main
         };
     }
 
-
-
-    public Observable<Movie> getMovieCountryObservable(){
-        return RetrofitClient.getRetrofit().create(MovieService.class)
-                .getPopMoviesByCountry(Constants.API_KEY, Constants.DEFAULT_LANGUAGE,null, Constants.DEFAULT_REGION)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
     public DisposableObserver<Movie> getMovieCountryObserver(){
         return new DisposableObserver<Movie>() {
             @Override
             public void onNext(@NonNull Movie movie) {
-                Log.d(TAG, "onNext " + movie.getTotalResults());
+                Log.d(TAG, "getMovieCountry onNext " + movie.getTotalResults());
                 mvi.displayMoviesCountry(movie);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "onError  " + e);
+                Log.d(TAG, "getMovieCountry onError  " + e);
                 e.printStackTrace();
                 mvi.displayError(String.valueOf(R.string.error_get_movie));
             }

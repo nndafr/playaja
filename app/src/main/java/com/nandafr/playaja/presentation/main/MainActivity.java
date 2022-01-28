@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
     private void setupMVP(){
-        getMovieUseCase = new MainUseCaseImp();
+        getMovieUseCase = new GetMovieUseCase();
         mainPresenter = new MainPresenter(this, getMovieUseCase);
     }
 

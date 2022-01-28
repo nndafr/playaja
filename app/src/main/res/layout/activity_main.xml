@@ -33,7 +33,7 @@
                 android:id="@+id/home_banner"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_155sdp"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@drawable/homebanner"
                 android:scaleType="fitXY"/>
 
             <TextView
