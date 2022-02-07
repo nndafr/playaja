@@ -1,20 +1,41 @@
-package com.nandafr.playaja.domain.models;
+package com.nandafr.playaja.data.movie.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class VideoResult {
+public class VideoResultDataClass {
 
+    @SerializedName("iso_639_1")
+    @Expose
     private String iso6391;
+    @SerializedName("iso_3166_1")
+    @Expose
     private String iso31661;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("key")
+    @Expose
     private String key;
+    @SerializedName("site")
+    @Expose
     private String site;
+    @SerializedName("size")
+    @Expose
     private Integer size;
+    @SerializedName("type")
+    @Expose
     private String type;
+    @SerializedName("official")
+    @Expose
     private Boolean official;
+    @SerializedName("published_at")
+    @Expose
     private String publishedAt;
+    @SerializedName("id")
+    @Expose
     private String id;
+
 
     public String getIso6391() {
         return iso6391;
@@ -95,4 +116,6 @@ public class VideoResult {
     public void setId(String id) {
         this.id = id;
     }
+
+
 }

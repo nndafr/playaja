@@ -1,4 +1,4 @@
-package com.nandafr.playaja.presentation.detail;
+package com.nandafr.playaja.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -17,12 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nandafr.playaja.R;
+import com.nandafr.playaja.data.movie.repository.MovieDetailRepositoryImp;
 import com.nandafr.playaja.domain.interfaces.detail.DetailView;
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
+import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
 import com.nandafr.playaja.domain.models.Movie;
 import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.domain.models.Video;
+import com.nandafr.playaja.domain.repository.MovieDetailRepository;
 import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCase;
+import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCaseImp;
 import com.nandafr.playaja.external.Constants;
+import com.nandafr.playaja.app.presenter.DetailPresenter;
+import com.nandafr.playaja.external.main.adapters.PopularMovieAdapter;
+import com.nandafr.playaja.external.main.adapters.RecommMovieAdapter;
 
 public class DetailActivity extends AppCompatActivity implements DetailView {
 
@@ -36,7 +44,10 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
     private RecyclerView.Adapter adapterRelateMovie;
     private DetailPresenter detailPresenter;
     private GetMovieDetailUseCase getMovieDetailUseCase;
+    private MovieDetailRepository movieDetailRepository;
     private int movieid;
+    private RecyclerView rvRecommMovie;
+    private RecyclerView.Adapter adapterRecommMovie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,12 +71,14 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         setupMVP();
         getMovieDetail(movieid);
         getSingleVideoMovie(movieid);
+        getRelateMovie(movieid);
 
     }
 
     private void setupMVP() {
-        getMovieDetailUseCase = new GetMovieDetailUseCase();
-        detailPresenter = new DetailPresenter(this, getMovieDetailUseCase);
+        movieDetailRepository = new MovieDetailRepositoryImp();
+        getMovieDetailUseCase = new GetMovieDetailUseCaseImp(movieDetailRepository);
+        detailPresenter = new DetailPresenter(this, movieDetailRepository);
     }
 
     private void setupViews() {
@@ -75,6 +88,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         backButton.setVisibility(View.VISIBLE);
         appbarTitle = findViewById(R.id.appbar_title);
         appbarTitle.setVisibility(View.VISIBLE);
+
+        rvRecommMovie = findViewById(R.id.rv_movie_recommendation);
 
         ytVideoPlayer = findViewById(R.id.movie_player);
         title = findViewById(R.id.movie_title);
@@ -98,8 +113,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
         detailPresenter.getSingleMovie(movie_id);
     }
 
-    private void getRelateMovie(){
-        detailPresenter.getRelateMovie();
+    private void getRelateMovie(int movie_id){
+        detailPresenter.getRelateMovie(movie_id);
     }
 
     private void getSingleVideoMovie(int movie_id){
@@ -146,30 +161,43 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
 
     @Override
     public void displayRelateMovie(Movie response) {
-
+        if(response != null){
+//            Log.d(TAG, response.getResults().get(1).getTitle());
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            adapterRecommMovie = new RecommMovieAdapter(response.getResults(), DetailActivity.this);
+            rvRecommMovie.setAdapter(adapterRecommMovie);
+            rvRecommMovie.setLayoutManager(layoutManager);
+        }else {
+            Log.d(TAG, "Movie response null");
+        }
     }
 
     @Override
     public void displaySingleVideo(Video response) {
 
         if(response != null){
+            if(response.getResults().get(0).getSite().equals("YouTube")){
+                String url = "https://www.youtube.com/embed/" + response.getResults().get(0).getKey() +"?rel=0&controls=0";
+                String loadData = "<html><body><iframe frameborder=0 allowfullscreen width=100% height=100% src="+ url +"></iframe></body></html>";
 
-            String url = "https://www.youtube.com/embed/" + response.getResults().get(0).getKey() +"?rel=0&controls=0";
-            String loadData = "<html><body><iframe frameborder=0 allowfullscreen width=100% height=100% src="+ url +"></iframe></body></html>";
+                ytVideoPlayer.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                        return false;
+                    }
+                });
+                WebSettings webSettings = ytVideoPlayer.getSettings();
+                webSettings.setJavaScriptEnabled(true);
+                webSettings.setUseWideViewPort(true);
+                webSettings.setLoadWithOverviewMode(true);
+                ytVideoPlayer.loadData(loadData, "text/html", "utf-8");
 
-            ytVideoPlayer.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return false;
-                }
-            });
-            WebSettings webSettings = ytVideoPlayer.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            webSettings.setUseWideViewPort(true);
-            webSettings.setLoadWithOverviewMode(true);
-            ytVideoPlayer.loadData(loadData, "text/html", "utf-8");
+                Log.d(TAG, "" + response.getResults().get(0).getKey());
+            }else{
+                showToast("Video Tidak tersedia!");
+                Log.d(TAG, "Sumber video bukan dari youtube");
+            }
 
-            Log.d(TAG, "" + response.getResults().get(0).getKey());
 
         }else{
             Log.d(TAG, "Movie response null");
@@ -179,6 +207,6 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
 
     @Override
     public void displayError(String msg) {
-
+        showToast(msg);
     }
 }

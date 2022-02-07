@@ -1,5 +1,8 @@
 package com.nandafr.playaja.domain.interfaces.detail;
 
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
+import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
+import com.nandafr.playaja.data.movie.model.VideoResultDataClass;
 import com.nandafr.playaja.domain.models.Movie;
 import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.domain.models.Video;

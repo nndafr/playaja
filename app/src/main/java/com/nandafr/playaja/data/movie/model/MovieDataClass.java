@@ -1,18 +1,24 @@
-package com.nandafr.playaja.domain.models;
+package com.nandafr.playaja.data.movie.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.nandafr.playaja.data.movie.model.MovieDataClass;
-import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
+import com.nandafr.playaja.domain.models.MovieResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Movie {
+public class MovieDataClass {
 
+    @SerializedName("page")
+    @Expose
     private Integer page;
+    @SerializedName("results")
+    @Expose
     private List<MovieResultDataClass> results = null;
+    @SerializedName("total_pages")
+    @Expose
     private Integer totalPages;
+    @SerializedName("total_results")
+    @Expose
     private Integer totalResults;
 
     public Integer getPage() {

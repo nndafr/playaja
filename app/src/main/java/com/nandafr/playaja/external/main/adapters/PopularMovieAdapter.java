@@ -9,28 +9,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nandafr.playaja.R;
-import com.nandafr.playaja.domain.models.MovieResult;
+import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
 import com.nandafr.playaja.external.Constants;
-import com.nandafr.playaja.presentation.detail.DetailActivity;
-import com.nandafr.playaja.presentation.main.MainActivity;
+import com.nandafr.playaja.app.view.DetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapter.PopularMoviesHolder> {
 
-    List<MovieResult> movieList;
+    List<MovieResultDataClass> movieList;
     Context context;
     String TAG = PopularMovieAdapter.class.getSimpleName();
 
 
-    public PopularMovieAdapter(List<MovieResult> movieList, Context context){
+    public PopularMovieAdapter(List<MovieResultDataClass> movieList, Context context){
         this.movieList = movieList;
         this.context = context;
     }
@@ -58,6 +56,8 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
 //                Toast.makeText(context, "Dipilih: " + idMovie, Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(context, DetailActivity.class);
                 i.putExtra(Constants.KEY_IDMOVIE, idMovie);
+//                i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+//                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 view.getContext().startActivity(i);
             }
         });
@@ -67,7 +67,11 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
 
     @Override
     public int getItemCount() {
-        return movieList.size();
+        if(movieList == null){
+            return 0;
+        }else {
+            return movieList.size();
+        }
     }
 
     public class PopularMoviesHolder extends RecyclerView.ViewHolder{

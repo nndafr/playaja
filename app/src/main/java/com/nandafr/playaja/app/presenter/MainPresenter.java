@@ -1,21 +1,18 @@
-package com.nandafr.playaja.presentation.main;
+package com.nandafr.playaja.app.presenter;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.nandafr.playaja.R;
-import com.nandafr.playaja.domain.usecases.GetMovieUseCase;
-import com.nandafr.playaja.external.Constants;
-import com.nandafr.playaja.data.movie.MovieService;
-import com.nandafr.playaja.data.movie.RetrofitClient;
-import com.nandafr.playaja.domain.interfaces.main.MainView;
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
 import com.nandafr.playaja.domain.models.Movie;
+import com.nandafr.playaja.domain.repository.MovieRepository;
+import com.nandafr.playaja.domain.usecases.GetMovieUseCase;
+import com.nandafr.playaja.domain.interfaces.main.MainView;
+import com.nandafr.playaja.domain.usecases.GetMovieUseCaseImp;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main.MainPresenter {
 
@@ -24,9 +21,8 @@ public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main
     private String TAG = MainPresenter.class.getSimpleName();
 
 
-
-    public MainPresenter(MainView mvi, GetMovieUseCase getMovieUseCase) {
-        this.getMovieUseCase = getMovieUseCase;
+    public MainPresenter(MainView mvi, MovieRepository movieRepository) {
+        this.getMovieUseCase = new GetMovieUseCaseImp(movieRepository);
         this.mvi = mvi;
     }
 
@@ -39,7 +35,9 @@ public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main
     @Override
     public void getPopMovieCountry() {
         getMovieUseCase.getPopMovieByCountry().subscribeWith(getMovieCountryObserver());
+
     }
+
 
     public DisposableObserver<Movie> getMovieObserver(){
         return new DisposableObserver<Movie>() {
@@ -84,5 +82,8 @@ public class MainPresenter implements com.nandafr.playaja.domain.interfaces.main
             }
         };
     }
+
+
+
 
 }

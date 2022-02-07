@@ -1,13 +1,13 @@
 package com.nandafr.playaja.domain.repository;
 
-import com.nandafr.playaja.domain.models.Movie;
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
 
 import io.reactivex.Observable;
 
 public interface MovieRepository {
 
     //Pop = Popular;
-    Observable<Movie> getPopMovie();
-    Observable<Movie> getPopMovieByCountry();
+    Observable<MovieDataClass> getPopMovie();
+    Observable<MovieDataClass> getPopMovieByCountry();
 
 }

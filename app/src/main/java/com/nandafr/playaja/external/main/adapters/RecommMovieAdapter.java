@@ -14,34 +14,34 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.nandafr.playaja.R;
+import com.nandafr.playaja.app.view.DetailActivity;
 import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
 import com.nandafr.playaja.external.Constants;
-import com.nandafr.playaja.app.view.DetailActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class PopularMovieCountryAdapter extends RecyclerView.Adapter<PopularMovieCountryAdapter.PopularMoviesHolder> {
+public class RecommMovieAdapter extends RecyclerView.Adapter<RecommMovieAdapter.RecommMoviesHolder> {
 
     List<MovieResultDataClass> movieList;
     Context context;
     String TAG = PopularMovieCountryAdapter.class.getSimpleName();
 
 
-    public PopularMovieCountryAdapter(List<MovieResultDataClass> movieList, Context context){
+    public RecommMovieAdapter(List<MovieResultDataClass> movieList, Context context){
         this.movieList = movieList;
         this.context = context;
     }
 
     @Override
-    public PopularMoviesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecommMovieAdapter.RecommMoviesHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_single_movie, parent, false);
-        PopularMoviesHolder mh = new PopularMoviesHolder(v);
+        RecommMovieAdapter.RecommMoviesHolder mh = new RecommMovieAdapter.RecommMoviesHolder(v);
         return mh;
     }
 
     @Override
-    public void onBindViewHolder(PopularMoviesHolder holder, int position) {
+    public void onBindViewHolder(RecommMovieAdapter.RecommMoviesHolder holder, int position) {
         int idMovie = movieList.get(position).getId();
         String title = movieList.get(position).getTitle();
         holder.movieTitle.setText(movieList.get(position).getTitle());
@@ -69,13 +69,13 @@ public class PopularMovieCountryAdapter extends RecyclerView.Adapter<PopularMovi
         return movieList.size();
     }
 
-    public class PopularMoviesHolder extends RecyclerView.ViewHolder{
+    public class RecommMoviesHolder extends RecyclerView.ViewHolder{
 
         TextView movieTitle;
         ImageView moviePoster;
         RelativeLayout movieItem;
 
-        public PopularMoviesHolder(@NonNull View itemView) {
+        public RecommMoviesHolder(@NonNull View itemView) {
             super(itemView);
 
             movieTitle = itemView.findViewById(R.id.movie_title);

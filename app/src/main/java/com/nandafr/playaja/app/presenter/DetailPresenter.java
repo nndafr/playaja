@@ -1,23 +1,21 @@
-package com.nandafr.playaja.presentation.detail;
+package com.nandafr.playaja.app.presenter;
 
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.nandafr.playaja.R;
-import com.nandafr.playaja.data.movie.MovieService;
-import com.nandafr.playaja.data.movie.RetrofitClient;
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
 import com.nandafr.playaja.domain.interfaces.detail.DetailView;
+import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
 import com.nandafr.playaja.domain.models.Movie;
 import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.domain.models.Video;
+import com.nandafr.playaja.domain.repository.MovieDetailRepository;
 import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCase;
-import com.nandafr.playaja.external.Constants;
+import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCaseImp;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.detail.DetailPresenter {
 
@@ -26,8 +24,8 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
     private String TAG = DetailPresenter.class.getSimpleName();
 
 
-    public DetailPresenter(DetailView dvi, GetMovieDetailUseCase getMovieDetailUseCase) {
-        this.getMovieDetailUseCase = getMovieDetailUseCase;
+    public DetailPresenter(DetailView dvi, MovieDetailRepository movieDetailRepository) {
+        this.getMovieDetailUseCase = new GetMovieDetailUseCaseImp(movieDetailRepository);
         this.dvi = dvi;
     }
 
@@ -94,7 +92,29 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
 
 
     @Override
-    public void getRelateMovie() {
+    public void getRelateMovie(int movie_id) {
+        getMovieDetailUseCase.getRelateMovie(movie_id).subscribeWith(getRecommMovieObserver());
+    }
 
+    private DisposableObserver<Movie> getRecommMovieObserver() {
+        return new DisposableObserver<Movie>() {
+            @Override
+            public void onNext(@NonNull Movie movie) {
+                Log.d(TAG, "getRecommMovie onNext " + movie.getTotalResults());
+                dvi.displayRelateMovie(movie);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d(TAG, "getMovie onError  " + e);
+                e.printStackTrace();
+                dvi.displayError(String.valueOf(R.string.error_get_movie));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
+            }
+        };
     }
 }

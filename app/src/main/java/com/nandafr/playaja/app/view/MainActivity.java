@@ -1,4 +1,4 @@
-package com.nandafr.playaja.presentation.main;
+package com.nandafr.playaja.app.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -13,11 +13,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.nandafr.playaja.R;
+import com.nandafr.playaja.data.movie.model.MovieDataClass;
+import com.nandafr.playaja.data.movie.repository.MovieRepositoryImp;
 import com.nandafr.playaja.domain.interfaces.main.MainView;
 import com.nandafr.playaja.domain.models.Movie;
+import com.nandafr.playaja.domain.repository.MovieRepository;
 import com.nandafr.playaja.domain.usecases.GetMovieUseCase;
+import com.nandafr.playaja.domain.usecases.GetMovieUseCaseImp;
 import com.nandafr.playaja.external.main.adapters.PopularMovieAdapter;
 import com.nandafr.playaja.external.main.adapters.PopularMovieCountryAdapter;
+import com.nandafr.playaja.app.presenter.MainPresenter;
 
 public class MainActivity extends AppCompatActivity implements MainView {
 
@@ -29,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     private RecyclerView.Adapter adapterPopMovie, adapterMovieByCountry;
     private MainPresenter mainPresenter;
     private GetMovieUseCase getMovieUseCase;
+    private MovieRepository movieRepository;
+
 
 
     @Override
@@ -44,8 +51,9 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
 
     private void setupMVP(){
-        getMovieUseCase = new GetMovieUseCase();
-        mainPresenter = new MainPresenter(this, getMovieUseCase);
+        movieRepository = new MovieRepositoryImp();
+        getMovieUseCase = new GetMovieUseCaseImp(movieRepository);
+        mainPresenter = new MainPresenter(this, movieRepository);
     }
 
     private void setupViews(){
