@@ -11,7 +11,7 @@ import java.util.List;
 public class Movie {
 
     private Integer page;
-    private List<MovieResultDataClass> results = null;
+    private List<MovieResult> results = null;
     private Integer totalPages;
     private Integer totalResults;
 
@@ -23,11 +23,11 @@ public class Movie {
         this.page = page;
     }
 
-    public List<MovieResultDataClass> getResults() {
+    public List<MovieResult> getResults() {
         return results;
     }
 
-    public void setResults(List<MovieResultDataClass> results) {
+    public void setResults(List<MovieResult> results) {
         this.results = results;
     }
 

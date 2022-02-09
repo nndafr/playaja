@@ -52,4 +52,6 @@ public class MovieDataClass {
     public void setTotalResults(Integer totalResults) {
         this.totalResults = totalResults;
     }
+
+
 }

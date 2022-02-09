@@ -64,7 +64,27 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
     @Override
     public void getSingleVideo(int movie_id) {
         Log.d(TAG, "getSingleVideo " + movie_id);
-        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribeWith(getSingleVideoMovieObserver());
+//        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribeWith(getSingleVideoMovieObserver());
+        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribe(new DisposableObserver<Video>() {
+            @Override
+            public void onNext(@NonNull Video video) {
+                Log.d(TAG, "onNext " + video.getResults());
+                dvi.displaySingleVideo(video);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d(TAG, "onError  " + e);
+                e.printStackTrace();
+                dvi.displayError(String.valueOf(R.string.error_get_movie));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
+
+            }
+        });
     }
 
 
@@ -93,7 +113,26 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
 
     @Override
     public void getRelateMovie(int movie_id) {
-        getMovieDetailUseCase.getRelateMovie(movie_id).subscribeWith(getRecommMovieObserver());
+//        getMovieDetailUseCase.getRelateMovie(movie_id).subscribeWith(getRecommMovieObserver());
+        getMovieDetailUseCase.getRelateMovie(movie_id).subscribe(new DisposableObserver<Movie>() {
+            @Override
+            public void onNext(@NonNull Movie movie) {
+                Log.d(TAG, "getRecommMovie onNext " + movie.getTotalResults());
+                dvi.displayRelateMovie(movie);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Log.d(TAG, "getMovie onError  " + e);
+                e.printStackTrace();
+                dvi.displayError(String.valueOf(R.string.error_get_movie));
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
+            }
+        });
     }
 
     private DisposableObserver<Movie> getRecommMovieObserver() {

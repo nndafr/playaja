@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nandafr.playaja.R;
 import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
+import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.external.Constants;
 import com.nandafr.playaja.app.view.DetailActivity;
 import com.squareup.picasso.Picasso;
@@ -23,12 +24,12 @@ import java.util.List;
 
 public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapter.PopularMoviesHolder> {
 
-    List<MovieResultDataClass> movieList;
+    List<MovieResult> movieList;
     Context context;
     String TAG = PopularMovieAdapter.class.getSimpleName();
 
 
-    public PopularMovieAdapter(List<MovieResultDataClass> movieList, Context context){
+    public PopularMovieAdapter(List<MovieResult> movieList, Context context){
         this.movieList = movieList;
         this.context = context;
     }
@@ -43,6 +44,7 @@ public class PopularMovieAdapter extends RecyclerView.Adapter<PopularMovieAdapte
     @Override
     public void onBindViewHolder(PopularMoviesHolder holder, int position) {
 
+        Log.d(TAG, "OUTPUT ADAPTER -> " + movieList.size());
         String title = movieList.get(position).getTitle();
         int idMovie = movieList.get(position).getId();
         holder.movieTitle.setText(movieList.get(position).getTitle());

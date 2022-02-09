@@ -1,6 +1,7 @@
 package com.nandafr.playaja.domain.usecases;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.nandafr.playaja.data.movie.model.MovieDataClass;
 import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
@@ -11,6 +12,12 @@ import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.domain.models.Video;
 import com.nandafr.playaja.domain.models.VideoResult;
 import com.nandafr.playaja.domain.repository.MovieDetailRepository;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,7 +40,6 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                     public MovieResult apply(@NonNull MovieResultDataClass movieResultDataClass) throws Exception {
 
                         MovieResult movieResult = new MovieResult();
-
                         movieResult.setId(movieResultDataClass.getId());
                         movieResult.setTitle(movieResultDataClass.getTitle());
                         movieResult.setVoteAverage(movieResultDataClass.getVoteAverage());
@@ -54,7 +60,6 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                     public Video apply(@NonNull VideoDataClass videoDataClass) throws Exception {
 
                         Video video = new Video();
-
                         video.setId(videoDataClass.getId());
                         video.setResults(videoDataClass.getResults());
 
@@ -71,16 +76,31 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                 .map(new Function<MovieDataClass, Movie>() {
                     @Override
                     public Movie apply(@NonNull MovieDataClass movieDataClass) throws Exception {
+
+                        List<MovieResult> movieResultsList = new ArrayList<>();
+                        for(int i=0; i < movieDataClass.getResults().size(); i++){
+                            MovieResult movieResult = new MovieResult();
+                            movieResult.setId(movieDataClass.getResults().get(i).getId());
+                            movieResult.setBackdropPath(movieDataClass.getResults().get(i).getBackdropPath());
+                            movieResult.setPosterPath(movieDataClass.getResults().get(i).getPosterPath());
+                            movieResult.setTitle(movieDataClass.getResults().get(i).getTitle());
+                            movieResult.setOverview(movieDataClass.getResults().get(i).getOverview());
+                            movieResult.setVoteAverage(movieDataClass.getResults().get(i).getVoteAverage());
+                            movieResult.setReleaseDate(movieDataClass.getResults().get(i).getReleaseDate());
+                            movieResultsList.add(movieResult);
+                        }
+
                         Movie movie = new Movie();
                         movie.setTotalResults(movieDataClass.getTotalResults());
                         movie.setTotalPages(movieDataClass.getTotalPages());
                         movie.setPage(movieDataClass.getPage());
-                        movie.setResults(movieDataClass.getResults());
+                        movie.setResults(movieResultsList);
 
                         return movie;
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
 
 }

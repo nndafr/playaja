@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.nandafr.playaja.R;
 import com.nandafr.playaja.data.movie.model.MovieResultDataClass;
+import com.nandafr.playaja.domain.models.MovieResult;
 import com.nandafr.playaja.external.Constants;
 import com.nandafr.playaja.app.view.DetailActivity;
 import com.squareup.picasso.Picasso;
@@ -23,12 +24,12 @@ import java.util.List;
 
 public class PopularMovieCountryAdapter extends RecyclerView.Adapter<PopularMovieCountryAdapter.PopularMoviesHolder> {
 
-    List<MovieResultDataClass> movieList;
+    List<MovieResult> movieList;
     Context context;
     String TAG = PopularMovieCountryAdapter.class.getSimpleName();
 
 
-    public PopularMovieCountryAdapter(List<MovieResultDataClass> movieList, Context context){
+    public PopularMovieCountryAdapter(List<MovieResult> movieList, Context context){
         this.movieList = movieList;
         this.context = context;
     }
