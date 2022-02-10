@@ -15,6 +15,7 @@ import com.nandafr.playaja.domain.repository.MovieDetailRepository;
 import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCase;
 import com.nandafr.playaja.domain.usecases.GetMovieDetailUseCaseImp;
 
+import io.reactivex.Scheduler;
 import io.reactivex.observers.DisposableObserver;
 
 public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.detail.DetailPresenter {
@@ -22,138 +23,79 @@ public class DetailPresenter implements com.nandafr.playaja.domain.interfaces.de
     private DetailView dvi;
     private GetMovieDetailUseCase getMovieDetailUseCase;
     private String TAG = DetailPresenter.class.getSimpleName();
+    private Scheduler mainThread;
 
 
-    public DetailPresenter(DetailView dvi, MovieDetailRepository movieDetailRepository) {
-        this.getMovieDetailUseCase = new GetMovieDetailUseCaseImp(movieDetailRepository);
+    public DetailPresenter(DetailView dvi, MovieDetailRepository movieDetailRepository, Scheduler mainThread) {
+        this.getMovieDetailUseCase = new GetMovieDetailUseCaseImp(mainThread,movieDetailRepository);
         this.dvi = dvi;
+        this.mainThread = mainThread;
     }
 
     @Override
     public void getSingleMovie(int movie_id) {
-        Log.d(TAG, "getSingleMovie " + movie_id);
-
-        getMovieDetailUseCase.getSingleMovie(movie_id).subscribeWith(getDetailMovieObserver());
-
-
-    }
-
-    public DisposableObserver<MovieResult> getDetailMovieObserver(){
-        return new DisposableObserver<MovieResult>() {
+        getMovieDetailUseCase.getSingleMovie(movie_id).subscribe(new DisposableObserver<MovieResult>() {
             @Override
-            public void onNext(@NonNull MovieResult movie) {
-                Log.d(TAG, "getDetailMovie onNext " + movie.getId());
-                dvi.displayDetailMovie(movie);
+            public void onNext(MovieResult movieResult) {
+                dvi.displayDetailMovie(movieResult);
+
             }
 
             @Override
-            public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "getDetailMovie onError  " + e);
+            public void onError(Throwable e) {
                 e.printStackTrace();
                 dvi.displayError(String.valueOf(R.string.error_get_movie));
+
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
-            }
-        };
-    }
-
-
-    @Override
-    public void getSingleVideo(int movie_id) {
-        Log.d(TAG, "getSingleVideo " + movie_id);
-//        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribeWith(getSingleVideoMovieObserver());
-        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribe(new DisposableObserver<Video>() {
-            @Override
-            public void onNext(@NonNull Video video) {
-                Log.d(TAG, "onNext " + video.getResults());
-                dvi.displaySingleVideo(video);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "onError  " + e);
-                e.printStackTrace();
-                dvi.displayError(String.valueOf(R.string.error_get_movie));
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
-
+                //Do Something
             }
         });
     }
-
-
-    public DisposableObserver<Video> getSingleVideoMovieObserver(){
-        return new DisposableObserver<Video>() {
+    @Override
+    public void getSingleVideo(int movie_id) {
+        getMovieDetailUseCase.getSingleMovieVideo(movie_id).subscribe(new DisposableObserver<Video>() {
             @Override
             public void onNext(@NonNull Video video) {
-                Log.d(TAG, "onNext " + video.getResults());
                 dvi.displaySingleVideo(video);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "onError  " + e);
                 e.printStackTrace();
                 dvi.displayError(String.valueOf(R.string.error_get_movie));
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
+                //Do Something
+
             }
-        };
+        });
     }
 
 
     @Override
     public void getRelateMovie(int movie_id) {
-//        getMovieDetailUseCase.getRelateMovie(movie_id).subscribeWith(getRecommMovieObserver());
-        getMovieDetailUseCase.getRelateMovie(movie_id).subscribe(new DisposableObserver<Movie>() {
+         getMovieDetailUseCase.getRelateMovie(movie_id).subscribe(new DisposableObserver<Movie>() {
             @Override
             public void onNext(@NonNull Movie movie) {
-                Log.d(TAG, "getRecommMovie onNext " + movie.getTotalResults());
                 dvi.displayRelateMovie(movie);
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "getMovie onError  " + e);
                 e.printStackTrace();
                 dvi.displayError(String.valueOf(R.string.error_get_movie));
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
+                //Do Something
             }
         });
     }
 
-    private DisposableObserver<Movie> getRecommMovieObserver() {
-        return new DisposableObserver<Movie>() {
-            @Override
-            public void onNext(@NonNull Movie movie) {
-                Log.d(TAG, "getRecommMovie onNext " + movie.getTotalResults());
-                dvi.displayRelateMovie(movie);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                Log.d(TAG, "getMovie onError  " + e);
-                e.printStackTrace();
-                dvi.displayError(String.valueOf(R.string.error_get_movie));
-            }
-
-            @Override
-            public void onComplete() {
-                Log.d(TAG, String.valueOf(R.string.complete_get_movie));
-            }
-        };
-    }
 }

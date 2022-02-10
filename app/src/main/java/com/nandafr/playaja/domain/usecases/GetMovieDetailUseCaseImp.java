@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 
@@ -27,9 +28,12 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
 
     private MovieDetailRepository movieDetailRepository;
     private String TAG = GetMovieDetailUseCaseImp.class.getSimpleName();
+    private Scheduler mainThread;
 
-    public GetMovieDetailUseCaseImp(MovieDetailRepository movieDetailRepository) {
+
+    public GetMovieDetailUseCaseImp(Scheduler mainThread,MovieDetailRepository movieDetailRepository) {
         this.movieDetailRepository = movieDetailRepository;
+        this.mainThread = mainThread;
     }
 
     @Override
@@ -49,7 +53,7 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                         return movieResult;
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(mainThread);
     }
 
     @Override
@@ -66,7 +70,7 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                         return video;
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(mainThread);
 
     }
 
@@ -99,7 +103,7 @@ public class GetMovieDetailUseCaseImp implements GetMovieDetailUseCase{
                         return movie;
                     }
                 })
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(mainThread);
     }
 
 

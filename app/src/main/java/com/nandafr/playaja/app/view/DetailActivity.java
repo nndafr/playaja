@@ -32,6 +32,8 @@ import com.nandafr.playaja.app.presenter.DetailPresenter;
 import com.nandafr.playaja.external.main.adapters.PopularMovieAdapter;
 import com.nandafr.playaja.external.main.adapters.RecommMovieAdapter;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 public class DetailActivity extends AppCompatActivity implements DetailView {
 
     private String TAG = DetailActivity.class.getSimpleName();
@@ -77,8 +79,8 @@ public class DetailActivity extends AppCompatActivity implements DetailView {
 
     private void setupMVP() {
         movieDetailRepository = new MovieDetailRepositoryImp();
-        getMovieDetailUseCase = new GetMovieDetailUseCaseImp(movieDetailRepository);
-        detailPresenter = new DetailPresenter(this, movieDetailRepository);
+        getMovieDetailUseCase = new GetMovieDetailUseCaseImp(AndroidSchedulers.mainThread(),movieDetailRepository);
+        detailPresenter = new DetailPresenter(this, movieDetailRepository, AndroidSchedulers.mainThread());
     }
 
     private void setupViews() {

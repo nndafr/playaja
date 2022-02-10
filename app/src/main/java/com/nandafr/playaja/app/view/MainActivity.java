@@ -24,6 +24,9 @@ import com.nandafr.playaja.external.main.adapters.PopularMovieAdapter;
 import com.nandafr.playaja.external.main.adapters.PopularMovieCountryAdapter;
 import com.nandafr.playaja.app.presenter.MainPresenter;
 
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+
 public class MainActivity extends AppCompatActivity implements MainView {
 
     private String TAG = MainActivity.class.getSimpleName();
@@ -52,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private void setupMVP(){
         movieRepository = new MovieRepositoryImp();
-        getMovieUseCase = new GetMovieUseCaseImp(movieRepository);
-        mainPresenter = new MainPresenter(this, movieRepository);
+        getMovieUseCase = new GetMovieUseCaseImp(AndroidSchedulers.mainThread(),movieRepository);
+        mainPresenter = new MainPresenter(this, movieRepository, AndroidSchedulers.mainThread());
     }
 
     private void setupViews(){
@@ -105,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
             rvPopularMovie.setAdapter(adapterPopMovie);
             rvPopularMovie.setLayoutManager(layoutManager);
         }else {
-            Log.d(TAG, "Movie response null");
+            //Log.d(TAG, "Movie response null");
         }
 
     }

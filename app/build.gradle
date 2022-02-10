@@ -72,8 +72,13 @@ dependencies {
     implementation "com.intuit.sdp:sdp-android:$sdpVersion"
 
 
+    //noinspection GradleDependency
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.7.1"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.7.1"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:5.7.1"
+    testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.7.1"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
