@@ -109,7 +109,7 @@ public class DetailPresenterTest {
         videoRDC.setId("1");
         videoRDC.setKey("2134567fdsa");
         videoRDC.setName("name");
-        videoRDC.setSite("youtube.com");
+        videoRDC.setSite("YouTube");
         videoRDCList.add(videoRDC);
 
 
